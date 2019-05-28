@@ -1,3 +1,4 @@
+library(dplyr)
 library(ggplot2)
 library(readr)
 library(zoo)
@@ -23,8 +24,16 @@ dataRaw$scheduled_61_90 <- as.integer(dataRaw$scheduled_61_90)
 dataRaw$scheduled_91_120 <- as.integer(dataRaw$scheduled_91_120)
 dataRaw$scheduled_120 <- as.integer(dataRaw$scheduled_120)
 
+#p <- ggplot(dataRaw, aes(x = ImagingType))
+p <- ggplot(dataRaw, aes(x = reorder(ImagingType,-TotalCompletedExams, function(x) {sum(x)})))
+#p <- p + geom_bar(color = "black", fill = "dodger blue")
+p <- p + stat_summary(aes(y = TotalCompletedExams),  fun.y = sum, geom = "bar")
 
- p <- ggplot(dataRaw, aes(x = ImagingType)) + geom_bar(fill = "dodger blue")
- p <- p + labs(x = NULL, y = "Exams")
- 
- print(p)
+p <- p + labs(x = NULL, y = "Exams")
+p <- p + theme(axis.text.x = element_text(
+    angle = 60,
+    hjust = 1,
+    vjust = 1
+  ))
+p <- p + theme(axis.title.y = element_text(angle = 0, vjust = 0.75))
+print(p)
