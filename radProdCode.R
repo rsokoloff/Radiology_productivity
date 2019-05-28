@@ -1,3 +1,4 @@
+library(ggplot2)
 library(readr)
 library(zoo)
 
@@ -6,7 +7,6 @@ dataRaw <-
   read_csv(paste(path, "2019-05-21_VISN_9_Radiology_productivity.csv", sep = "/"),
            col_names = T,
            na = "NULL"
-           
            )
 
 dataRaw$DatePulled <- as.Date(dataRaw$DatePulled,  format = "%m/%d/%Y")
@@ -24,5 +24,7 @@ dataRaw$scheduled_91_120 <- as.integer(dataRaw$scheduled_91_120)
 dataRaw$scheduled_120 <- as.integer(dataRaw$scheduled_120)
 
 
-
-
+ p <- ggplot(dataRaw, aes(x = ImagingType)) + geom_bar(fill = "dodger blue")
+ p <- p + labs(x = NULL, y = "Exams")
+ 
+ print(p)
